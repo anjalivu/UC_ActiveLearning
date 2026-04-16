@@ -831,5 +831,7 @@ def UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP
                 f.write("mae,{:.8f}\n".format(mae))
                 f.write("max_abs_error,{:.8f}\n".format(max_error))
 
+    return has_inflection, radius
+
 if __name__ == '__main__':
     UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP, rho_m, C10_m, D1_m, rho_t, E_t, nu_t, t_t, t_FRP, layup, meshSize, prestress, uz_pull, cpus)
