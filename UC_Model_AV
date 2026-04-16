@@ -526,17 +526,17 @@ def UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP
     # JOB STATUS CHECK
     # -------------------------------------------------------------------------------------
     # Open CSV file for writing
-    csv_file = job_name + '_results.csv'
-    with open(csv_file, 'w') as f:
+    # csv_file = job_name + '_results.csv'
+    # with open(csv_file, 'w') as f:
         
-        # ===== JOB STATUS CHECK =====
-        f.write('\n')
-        f.write(f"Simulation Time (seconds),{elapsed_time:.2f}\n")
-        f.write('Section,Job Status Check\n')
+    #     # ===== JOB STATUS CHECK =====
+    #     f.write('\n')
+    #     f.write(f"Simulation Time (seconds),{elapsed_time:.2f}\n")
+    #     f.write('Section,Job Status Check\n')
         
-        # open odb
-        odb_path = job_name + '.odb'
-        odb = odbAccess.openOdb(path=odb_path)
+    #     # open odb
+    #     odb_path = job_name + '.odb'
+    #     odb = odbAccess.openOdb(path=odb_path)
         
         # Check if simulation reached 3s in the 'Release' step
         if 'Release' in odb.steps and len(odb.steps['Release'].frames) > 0:
@@ -544,13 +544,13 @@ def UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP
             last_frame = release_step.frames[-1]
             simulation_complete = last_frame.frameValue >= 1.0
         
-            if simulation_complete:
-                f.write(f'Status, Simulation complete\n')
-            else:
-                f.write(f'Status, WARNING: Simulation did not complete, data will not be extracted \n')
+            # if simulation_complete:
+            #     f.write(f'Status, Simulation complete\n')
+            # else:
+            #     f.write(f'Status, WARNING: Simulation did not complete, data will not be extracted \n')
         else: 
             simulation_complete = False 
-            f.write(f'Status, WARNING: Simulation did not complete, data will not be extracted \n')
+            # f.write(f'Status, WARNING: Simulation did not complete, data will not be extracted \n')
         # -------------------------------------------------------------------------------------
         # DATA EXTRACTION: ONLY IF SIMULATION CONVERGED
         # -------------------------------------------------------------------------------------
@@ -558,8 +558,8 @@ def UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP
             # -------------------------------------------------------------------------------------
             # ENERGY CHECK FOR VALIDITY OF RESULTS
             # -------------------------------------------------------------------------------------
-            f.write('\n')
-            f.write('Section, Energy Data Extraction\n')
+            # f.write('\n')
+            # f.write('Section, Energy Data Extraction\n')
             
             # Get history region (whole model)
             step_key = odb.steps.keys()[-1]
@@ -571,7 +571,7 @@ def UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP
             artificial_energy = hist_region.historyOutputs['ALLAE'].data
             static_dissipation = hist_region.historyOutputs['ALLSD'].data
             
-            f.write('Info,Energy history data extracted successfully\n')
+            # f.write('Info,Energy history data extracted successfully\n')
             
             # Convert to arrays
             ke_values = np.array([point[1] for point in kinetic_energy])
@@ -580,8 +580,8 @@ def UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP
             sd_values = np.array([point[1] for point in static_dissipation])
             
             # Calculate ratios at each time step
-            f.write('\n')
-            f.write('Section,Energy Ratio Analysis\n')
+            # f.write('\n')
+            # f.write('Section,Energy Ratio Analysis\n')
             
             # Avoid division by zero
             se_nonzero = np.where(se_values != 0, se_values, 1e-10)
@@ -595,29 +595,29 @@ def UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP
             max_ae_ratio = np.max(ae_se_ratio)
             max_sd_ratio = np.max(sd_se_ratio)
             
-            f.write('Metric,Value\n')
-            f.write(f'Maximum Kinetic Energy / Strain Energy ratio,{max_ke_ratio:.6f}\n')
-            f.write(f'Maximum Artificial Energy / Strain Energy ratio,{max_ae_ratio:.6f}\n')
-            f.write(f'Maximum Static Dissipation / Strain Energy ratio,{max_sd_ratio:.6f}\n')
+            # f.write('Metric,Value\n')
+            # f.write(f'Maximum Kinetic Energy / Strain Energy ratio,{max_ke_ratio:.6f}\n')
+            # f.write(f'Maximum Artificial Energy / Strain Energy ratio,{max_ae_ratio:.6f}\n')
+            # f.write(f'Maximum Static Dissipation / Strain Energy ratio,{max_sd_ratio:.6f}\n')
             
-            # Recommendations based on ratios
-            f.write('\n')
-            f.write('Section,Analysis Recommendations\n')
+            # # Recommendations based on ratios
+            # f.write('\n')
+            # f.write('Section,Analysis Recommendations\n')
             
-            if max_ke_ratio > 0.1:
-                f.write('Warning,High kinetic energy ratio (>10%). Consider increasing the step time of step shape forming.\n')
-            else:
-                f.write('OK,Kinetic energy ratio is acceptable\n')
+            # if max_ke_ratio > 0.1:
+            #     f.write('Warning,High kinetic energy ratio (>10%). Consider increasing the step time of step shape forming.\n')
+            # else:
+            #     f.write('OK,Kinetic energy ratio is acceptable\n')
                 
-            if max_ae_ratio > 0.05:
-                f.write('Warning,High artificial energy ratio (>5%).\n')
-            else:
-                f.write('OK,Artificial energy ratio is acceptable\n')
+            # if max_ae_ratio > 0.05:
+            #     f.write('Warning,High artificial energy ratio (>5%).\n')
+            # else:
+            #     f.write('OK,Artificial energy ratio is acceptable\n')
                 
-            if max_sd_ratio > 0.1:
-                f.write('Warning,High static dissipation ratio (>10%). Consider reducing damping in step pull corners.\n\n')
-            else:
-                f.write('OK,Static dissipation energy ratio is acceptable\n\n')
+            # if max_sd_ratio > 0.1:
+            #     f.write('Warning,High static dissipation ratio (>10%). Consider reducing damping in step pull corners.\n\n')
+            # else:
+            #     f.write('OK,Static dissipation energy ratio is acceptable\n\n')
     
             # -------------------------------------------------------------------------------------
             # TRISTABILITY CHECK
@@ -681,10 +681,10 @@ def UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP
                         has_inflection = True
                         break
             
-            if has_inflection:
-                f.write(f'TRISTABILITY CHECK: Geometry is not Tristable\n')
-            else:
-                f.write(f'TRISTABILITY CHECK: Geometry is Tristable\n')
+            # if has_inflection:
+            #     f.write(f'TRISTABILITY CHECK: Geometry is not Tristable\n')
+            # else:
+            #     f.write(f'TRISTABILITY CHECK: Geometry is Tristable\n')
             
             # -------------------------------------------------------------------------------------
             # CYLINDER FIT
@@ -709,7 +709,7 @@ def UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP
             deformed_coords = []
             
             with open(coords_file, 'w') as f:
-                f.write('Node_Label,X_deformed,Y_deformed,Z_deformed\n')
+                # f.write('Node_Label,X_deformed,Y_deformed,Z_deformed\n')
                 
                 # Loop through all displacement values
                 for value in displacement_field.values:
@@ -737,7 +737,7 @@ def UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP
                     y_def = y_orig + u2
                     z_def = z_orig + u3
                     
-                    f.write(f'{node_label},{x_def:.6e},{y_def:.6e},{z_def:.6e}\n')
+                    # f.write(f'{node_label},{x_def:.6e},{y_def:.6e},{z_def:.6e}\n')
                     
                     # Store for cylinder fitting
                     deformed_coords.append([x_def, y_def, z_def])
@@ -813,23 +813,25 @@ def UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP
             mae = np.mean(np.abs(residuals))
             max_error = np.max(np.abs(residuals))
 
+            return has_tristability, radius, max_ke_ratio, max_sd_ratio, max_ae_ratio, 
 
-            # 5. Write results to csv
-            csv_file = job_name + '_cylinder_fit.csv'
-            with open(csv_file, 'w') as f:
-                f.write("axis_dir_x,{:.8f}\n".format(axis_dir[0]))
-                f.write("axis_dir_y,{:.8f}\n".format(axis_dir[1]))
-                f.write("axis_dir_z,{:.8f}\n".format(axis_dir[2]))
+
+            # # 5. Write results to csv
+            # csv_file = job_name + '_cylinder_fit.csv'
+            # with open(csv_file, 'w') as f:
+            #     f.write("axis_dir_x,{:.8f}\n".format(axis_dir[0]))
+            #     f.write("axis_dir_y,{:.8f}\n".format(axis_dir[1]))
+            #     f.write("axis_dir_z,{:.8f}\n".format(axis_dir[2]))
                 
-                f.write(f"axis_point_x,{axis_point[0]:.8f}\n")
-                f.write(f"axis_point_y,{axis_point[1]:.8f}\n")
-                f.write(f"axis_point_z,{axis_point[2]:.8f}\n")
+            #     f.write(f"axis_point_x,{axis_point[0]:.8f}\n")
+            #     f.write(f"axis_point_y,{axis_point[1]:.8f}\n")
+            #     f.write(f"axis_point_z,{axis_point[2]:.8f}\n")
 
-                f.write("radius,{:.8f}\n".format(radius))
+            #     f.write("radius,{:.8f}\n".format(radius))
 
-                f.write("rmse,{:.8f}\n".format(rmse))
-                f.write("mae,{:.8f}\n".format(mae))
-                f.write("max_abs_error,{:.8f}\n".format(max_error))
+            #     f.write("rmse,{:.8f}\n".format(rmse))
+            #     f.write("mae,{:.8f}\n".format(mae))
+            #     f.write("max_abs_error,{:.8f}\n".format(max_error))
 
 if __name__ == '__main__':
     UCModel(L, w_f, E1_FRP, E2_FRP, nu12_FRP, G12_FRP, G13_FRP, G23_FRP, rho_FRP, rho_m, C10_m, D1_m, rho_t, E_t, nu_t, t_t, t_FRP, layup, meshSize, prestress, uz_pull, cpus)
