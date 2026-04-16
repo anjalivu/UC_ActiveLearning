@@ -1,0 +1,571 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].Material(name='FRP')
+mdb.models['Model-1'].materials['FRP'].Density(table=((1.2e-09, ), ))
+mdb.models['Model-1'].materials['FRP'].Elastic(table=((222000.0, 7010.0, 0.314, 
+    4661.0, 4661.0, 2540.0), ), type=LAMINA)
+mdb.models['Model-1'].Material(name='Membrane')
+mdb.models['Model-1'].materials['Membrane'].Density(table=((1e-09, ), ))
+mdb.models['Model-1'].materials['Membrane'].Hyperelastic(materialType=ISOTROPIC
+    , table=((30.972, 0.0), ), testData=OFF, type=NEO_HOOKE, 
+    volumetricResponse=VOLUMETRIC_DATA)
+mdb.models['Model-1'].Material(name='Tape')
+mdb.models['Model-1'].materials['Tape'].Density(table=((1.2e-09, ), ))
+mdb.models['Model-1'].materials['Tape'].Elastic(table=((1.0, 0.3), ))
+mdb.models['Model-1'].ConstrainedSketch(name='__profile__', sheetSize=200.0)
+mdb.models['Model-1'].sketches['__profile__'].rectangle(point1=(-50.0, -50.0), 
+    point2=(50.0, 50.0))
+mdb.models['Model-1'].sketches['__profile__'].rectangle(point1=(-37.3, -37.3), 
+    point2=(37.3, 37.3))
+mdb.models['Model-1'].Part(dimensionality=THREE_D, name='frame', type=
+    DEFORMABLE_BODY)
+mdb.models['Model-1'].parts['frame'].BaseShell(sketch=
+    mdb.models['Model-1'].sketches['__profile__'])
+mdb.models['Model-1'].ConstrainedSketch(gridSpacing=2.16, name='__profile__', 
+    sheetSize=86.63, transform=
+    mdb.models['Model-1'].parts['frame'].MakeSketchTransform(
+    sketchPlane=mdb.models['Model-1'].parts['frame'].faces[0], 
+    sketchPlaneSide=SIDE1, 
+    sketchUpEdge=mdb.models['Model-1'].parts['frame'].edges[5], 
+    sketchOrientation=RIGHT, origin=(0.0, 0.0, 0.0)))
+mdb.models['Model-1'].parts['frame'].projectReferencesOntoSketch(filter=
+    COPLANAR_EDGES, sketch=mdb.models['Model-1'].sketches['__profile__'])
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-37.3, -50.0), 
+    point2=(-37.3, -37.3))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-50.0, -37.3), 
+    point2=(-37.3, -37.3))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-50.0, 37.3), 
+    point2=(-37.3, 37.3))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-37.3, 50.0), 
+    point2=(-37.3, 37.3))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(37.3, -50.0), 
+    point2=(37.3, -37.3))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(50.0, -37.3), 
+    point2=(37.3, -37.3))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(50.0, 37.3), point2=
+    (37.3, 37.3))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(37.3, 50.0), point2=
+    (37.3, 37.3))
+mdb.models['Model-1'].parts['frame'].PartitionFaceBySketch(faces=
+    mdb.models['Model-1'].parts['frame'].faces[0], sketch=
+    mdb.models['Model-1'].sketches['__profile__'], sketchUpEdge=
+    mdb.models['Model-1'].parts['frame'].edges[5])
+mdb.models['Model-1'].parts['frame'].CompositeLayup(description='', 
+    elementType=SHELL, name='Bottom_Left', offsetType=MIDDLE_SURFACE, 
+    symmetric=False, thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Left'].Section(
+    integrationRule=SIMPSON, poissonDefinition=DEFAULT, preIntegrate=OFF, 
+    temperature=GRADIENT, thicknessType=UNIFORM, useDensity=OFF)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Left'].ReferenceOrientation(
+    additionalRotationType=ROTATION_NONE, angle=0.0, axis=AXIS_3, fieldName='', 
+    localCsys=None, orientationType=GLOBAL)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='Tape', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0.0, plyName='Tape', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#10 ]', ), )), suppressed=False, thickness=0.13, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0, plyName='Ply-1', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#10 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-2', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#10 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0, plyName='Ply-3', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#10 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-4', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#10 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=180, plyName='Ply-5', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#10 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-6', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#10 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].CompositeLayup(description='', 
+    elementType=SHELL, name='Bottom_Right', offsetType=MIDDLE_SURFACE, 
+    symmetric=False, thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Right'].Section(
+    integrationRule=SIMPSON, poissonDefinition=DEFAULT, preIntegrate=OFF, 
+    temperature=GRADIENT, thicknessType=UNIFORM, useDensity=OFF)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Right'].ReferenceOrientation(
+    additionalRotationType=ROTATION_NONE, angle=0.0, axis=AXIS_3, fieldName='', 
+    localCsys=None, orientationType=GLOBAL)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='Tape', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0.0, plyName='Tape', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#80 ]', ), )), suppressed=False, thickness=0.13, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-1', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#80 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=180, plyName='Ply-2', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#80 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-3', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#80 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0, plyName='Ply-4', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#80 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-5', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#80 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0, plyName='Ply-6', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#80 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].CompositeLayup(description='', 
+    elementType=SHELL, name='Top_Left', offsetType=MIDDLE_SURFACE, symmetric=
+    False, thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Left'].Section(
+    integrationRule=SIMPSON, poissonDefinition=DEFAULT, preIntegrate=OFF, 
+    temperature=GRADIENT, thicknessType=UNIFORM, useDensity=OFF)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Left'].ReferenceOrientation(
+    additionalRotationType=ROTATION_NONE, angle=0.0, axis=AXIS_3, fieldName='', 
+    localCsys=None, orientationType=GLOBAL)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='Tape', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0.0, plyName='Tape', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#1 ]', ), )), suppressed=False, thickness=0.13, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-1', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#1 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=180, plyName='Ply-2', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#1 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-3', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#1 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0, plyName='Ply-4', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#1 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-5', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#1 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0, plyName='Ply-6', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#1 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].CompositeLayup(description='', 
+    elementType=SHELL, name='Top_Right', offsetType=MIDDLE_SURFACE, symmetric=
+    False, thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Right'].Section(
+    integrationRule=SIMPSON, poissonDefinition=DEFAULT, preIntegrate=OFF, 
+    temperature=GRADIENT, thicknessType=UNIFORM, useDensity=OFF)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Right'].ReferenceOrientation(
+    additionalRotationType=ROTATION_NONE, angle=0.0, axis=AXIS_3, fieldName='', 
+    localCsys=None, orientationType=GLOBAL)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='Tape', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0.0, plyName='Tape', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#8 ]', ), )), suppressed=False, thickness=0.13, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0, plyName='Ply-1', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#8 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-2', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#8 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0, plyName='Ply-3', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#8 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-4', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#8 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=180, plyName='Ply-5', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#8 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top_Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-6', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#8 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].CompositeLayup(description='', 
+    elementType=SHELL, name='Bottom', offsetType=MIDDLE_SURFACE, symmetric=
+    False, thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom'].Section(
+    integrationRule=SIMPSON, poissonDefinition=DEFAULT, preIntegrate=OFF, 
+    temperature=GRADIENT, thicknessType=UNIFORM, useDensity=OFF)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom'].ReferenceOrientation(
+    additionalRotationType=ROTATION_NONE, angle=0.0, axis=AXIS_3, fieldName='', 
+    localCsys=None, orientationType=GLOBAL)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='Tape', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0.0, plyName='Tape', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#40 ]', ), )), suppressed=False, thickness=0.13, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0, plyName='Ply-1', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#40 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-2', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#40 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Bottom'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0, plyName='Ply-3', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#40 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].CompositeLayup(description='', 
+    elementType=SHELL, name='Top', offsetType=MIDDLE_SURFACE, symmetric=False, 
+    thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top'].Section(
+    integrationRule=SIMPSON, poissonDefinition=DEFAULT, preIntegrate=OFF, 
+    temperature=GRADIENT, thicknessType=UNIFORM, useDensity=OFF)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top'].ReferenceOrientation(
+    additionalRotationType=ROTATION_NONE, angle=0.0, axis=AXIS_3, fieldName='', 
+    localCsys=None, orientationType=GLOBAL)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='Tape', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0.0, plyName='Tape', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#2 ]', ), )), suppressed=False, thickness=0.13, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0, plyName='Ply-1', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#2 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-2', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#2 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Top'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0, plyName='Ply-3', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#2 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].CompositeLayup(description='', 
+    elementType=SHELL, name='Left', offsetType=MIDDLE_SURFACE, symmetric=False, 
+    thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Left'].Section(
+    integrationRule=SIMPSON, poissonDefinition=DEFAULT, preIntegrate=OFF, 
+    temperature=GRADIENT, thicknessType=UNIFORM, useDensity=OFF)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Left'].ReferenceOrientation(
+    additionalRotationType=ROTATION_NONE, angle=0.0, axis=AXIS_3, fieldName='', 
+    localCsys=None, orientationType=GLOBAL)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='Tape', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0.0, plyName='Tape', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#4 ]', ), )), suppressed=False, thickness=0.13, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-1', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#4 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=180, plyName='Ply-2', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#4 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Left'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-3', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#4 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].CompositeLayup(description='', 
+    elementType=SHELL, name='Right', offsetType=MIDDLE_SURFACE, symmetric=False
+    , thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Right'].Section(
+    integrationRule=SIMPSON, poissonDefinition=DEFAULT, preIntegrate=OFF, 
+    temperature=GRADIENT, thicknessType=UNIFORM, useDensity=OFF)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Right'].ReferenceOrientation(
+    additionalRotationType=ROTATION_NONE, angle=0.0, axis=AXIS_3, fieldName='', 
+    localCsys=None, orientationType=GLOBAL)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='Tape', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=0.0, plyName='Tape', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#20 ]', ), )), suppressed=False, thickness=0.13, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-1', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#20 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=180, plyName='Ply-2', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#20 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].compositeLayups['Right'].CompositePly(
+    additionalRotationField='', additionalRotationType=ROTATION_NONE, angle=0.0
+    , axis=AXIS_3, material='FRP', numIntPoints=3, orientationType=
+    SPECIFY_ORIENT, orientationValue=90, plyName='Ply-3', region=Region(
+    faces=mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(mask=(
+    '[#20 ]', ), )), suppressed=False, thickness=0.04, thicknessType=
+    SPECIFY_THICKNESS)
+mdb.models['Model-1'].parts['frame'].seedPart(deviationFactor=0.1, 
+    minSizeFactor=0.1, size=2.54)
+mdb.models['Model-1'].parts['frame'].setElementType(elemTypes=(ElemType(
+    elemCode=S4, elemLibrary=STANDARD, secondOrderAccuracy=OFF, 
+    hourglassControl=DEFAULT), ElemType(elemCode=S3, elemLibrary=STANDARD)), 
+    regions=(mdb.models['Model-1'].parts['frame'].faces.getSequenceFromMask(
+    mask=('[#ff ]', ), ), ))
+mdb.models['Model-1'].parts['frame'].generateMesh()
+mdb.models['Model-1'].ConstrainedSketch(name='__profile__', sheetSize=200.0)
+mdb.models['Model-1'].sketches['__profile__'].rectangle(point1=(-50.0, -50.0), 
+    point2=(50.0, 50.0))
+mdb.models['Model-1'].Part(dimensionality=THREE_D, name='membrane', type=
+    DEFORMABLE_BODY)
+mdb.models['Model-1'].parts['membrane'].BaseShell(sketch=
+    mdb.models['Model-1'].sketches['__profile__'])
+mdb.models['Model-1'].ConstrainedSketch(gridSpacing=2.12, name='__profile__', 
+    sheetSize=84.85, transform=
+    mdb.models['Model-1'].parts['membrane'].MakeSketchTransform(
+    sketchPlane=mdb.models['Model-1'].parts['membrane'].faces[0], 
+    sketchPlaneSide=SIDE1, 
+    sketchUpEdge=mdb.models['Model-1'].parts['membrane'].edges[1], 
+    sketchOrientation=RIGHT, origin=(0.0, 0.0, 0.0)))
+mdb.models['Model-1'].parts['membrane'].projectReferencesOntoSketch(filter=
+    COPLANAR_EDGES, sketch=mdb.models['Model-1'].sketches['__profile__'])
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-37.3, -50.0), 
+    point2=(-37.3, 50.0))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(37.3, -50.0), 
+    point2=(37.3, 50.0))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-50.0, -37.3), 
+    point2=(50.0, -37.3))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-50.0, 37.3), 
+    point2=(50.0, 37.3))
+mdb.models['Model-1'].parts['membrane'].PartitionFaceBySketch(faces=
+    mdb.models['Model-1'].parts['membrane'].faces[0], sketch=
+    mdb.models['Model-1'].sketches['__profile__'], sketchUpEdge=
+    mdb.models['Model-1'].parts['membrane'].edges[1])
+mdb.models['Model-1'].MembraneSection(material='Membrane', name='Membrane', 
+    poissonDefinition=DEFAULT, thickness=0.025, thicknessField='', 
+    thicknessType=UNIFORM)
+mdb.models['Model-1'].parts['membrane'].Set(faces=
+    mdb.models['Model-1'].parts['membrane'].faces.getSequenceFromMask(mask=(
+    '[#1ff ]', ), ), name='Set-1')
+mdb.models['Model-1'].parts['membrane'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=
+    mdb.models['Model-1'].parts['membrane'].sets['Set-1'], sectionName=
+    'Membrane', thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].parts['membrane'].seedPart(deviationFactor=0.1, 
+    minSizeFactor=0.1, size=2.54)
+mdb.models['Model-1'].parts['membrane'].setElementType(elemTypes=(ElemType(
+    elemCode=M3D4R, elemLibrary=STANDARD, secondOrderAccuracy=OFF, 
+    hourglassControl=DEFAULT), ElemType(elemCode=M3D3, elemLibrary=STANDARD)), 
+    regions=(mdb.models['Model-1'].parts['membrane'].faces.getSequenceFromMask(
+    mask=('[#1ff ]', ), ), ))
+mdb.models['Model-1'].parts['membrane'].generateMesh()
+mdb.models['Model-1'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='frame-1', part=
+    mdb.models['Model-1'].parts['frame'])
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='membrane-1', 
+    part=mdb.models['Model-1'].parts['membrane'])
+mdb.models['Model-1'].rootAssembly.Surface(name='frame_bottom_surf', 
+    side2Faces=
+    mdb.models['Model-1'].rootAssembly.instances['frame-1'].faces.getSequenceFromMask(
+    mask=('[#ff ]', ), ))
+mdb.models['Model-1'].rootAssembly.Surface(name='membrane_top_surf', 
+    side1Faces=
+    mdb.models['Model-1'].rootAssembly.instances['membrane-1'].faces.getSequenceFromMask(
+    mask=('[#1ff ]', ), ))
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.surfaces['frame_bottom_surf'], name=
+    'Tie', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.surfaces['membrane_top_surf'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].rootAssembly.Set(faces=
+    mdb.models['Model-1'].rootAssembly.instances['membrane-1'].faces.getSequenceFromMask(
+    mask=('[#1ff ]', ), ), name='Set-1')
+mdb.models['Model-1'].Stress(distributionType=UNIFORM, name='Biaxial_prestress'
+    , region=mdb.models['Model-1'].rootAssembly.sets['Set-1'], sigma11=6.0, 
+    sigma12=0.0, sigma13=None, sigma22=6.0, sigma23=None, sigma33=None)
+mdb.models['Model-1'].rootAssembly.Set(name='fixedZNodes', vertices=
+    mdb.models['Model-1'].rootAssembly.instances['frame-1'].vertices.getSequenceFromMask(
+    mask=('[#120 ]', ), ))
+mdb.models['Model-1'].DisplacementBC(amplitude=UNSET, createStepName='Initial', 
+    distributionType=UNIFORM, fieldName='', localCsys=None, name='FixZ', 
+    region=mdb.models['Model-1'].rootAssembly.sets['fixedZNodes'], u1=UNSET, 
+    u2=UNSET, u3=SET, ur1=UNSET, ur2=UNSET, ur3=UNSET)
+mdb.models['Model-1'].rootAssembly.Set(name='pinnedZNodes', vertices=
+    mdb.models['Model-1'].rootAssembly.instances['frame-1'].vertices.getSequenceFromMask(
+    mask=('[#440 ]', ), ))
+mdb.models['Model-1'].DisplacementBC(amplitude=UNSET, createStepName='Initial', 
+    distributionType=UNIFORM, fieldName='', localCsys=None, name='PinnedBC', 
+    region=mdb.models['Model-1'].rootAssembly.sets['pinnedZNodes'], u1=SET, u2=
+    SET, u3=SET, ur1=UNSET, ur2=UNSET, ur3=SET)
+mdb.models['Model-1'].ImplicitDynamicsStep(alpha=DEFAULT, amplitude=RAMP, 
+    application=QUASI_STATIC, initialConditions=OFF, initialInc=0.1, maxNumInc=
+    10000, minInc=1e-09, name='ShapeForming', nlgeom=ON, nohaf=OFF, previous=
+    'Initial')
+mdb.models['Model-1'].StaticStep(adaptiveDampingRatio=0.01, 
+    continueDampingFactors=False, initialInc=0.01, maxNumInc=10000, minInc=
+    1e-09, name='pullCorners', previous='ShapeForming', stabilizationMagnitude=
+    2e-06, stabilizationMethod=DISSIPATED_ENERGY_FRACTION)
+mdb.models['Model-1'].rootAssembly.Set(name='pullingNodes', vertices=
+    mdb.models['Model-1'].rootAssembly.instances['frame-1'].vertices.getSequenceFromMask(
+    mask=('[#90 ]', ), ))
+mdb.models['Model-1'].DisplacementBC(amplitude=UNSET, createStepName=
+    'pullCorners', distributionType=UNIFORM, fieldName='', fixed=OFF, 
+    localCsys=None, name='pullCorners', region=
+    mdb.models['Model-1'].rootAssembly.sets['pullingNodes'], u1=UNSET, u2=UNSET
+    , u3=8.0, ur1=UNSET, ur2=UNSET, ur3=UNSET)
+mdb.models['Model-1'].ImplicitDynamicsStep(alpha=DEFAULT, amplitude=RAMP, 
+    application=QUASI_STATIC, initialConditions=OFF, initialInc=0.1, maxNumInc=
+    10000, minInc=1e-09, name='Release', nlgeom=ON, nohaf=OFF, previous=
+    'pullCorners')
+mdb.models['Model-1'].boundaryConditions['pullCorners'].deactivate('Release')
+mdb.models['Model-1'].FieldOutputRequest(createStepName='ShapeForming', 
+    frequency=1, name='F-Output-2', variables=('S', 'SE', 'U'))
+mdb.models['Model-1'].HistoryOutputRequest(createStepName='ShapeForming', 
+    frequency=1, name='H-Output-2', variables=('ALLAE', 'ALLIE', 'ALLKE', 
+    'ALLSE', 'ALLSD', 'ALLWK', 'ETOTAL'))
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='Model-1', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Job-1', nodalOutputPrecision=SINGLE, 
+    numCpus=1, numDomains=1, numGPUs=0, numThreadsPerMpiProcess=1, queue=None, 
+    resultsFormat=ODB, scratch='', type=ANALYSIS, userSubroutine='', waitHours=
+    0, waitMinutes=0)
+mdb.jobs['Job-1'].submit()
+mdb.jobs['Job-1'].waitForCompletion()
